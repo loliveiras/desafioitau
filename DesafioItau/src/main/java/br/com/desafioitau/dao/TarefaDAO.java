@@ -7,14 +7,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import br.com.desafioitau.entity.Livro;
+import br.com.desafioitau.entity.Tarefa;
 
 @Repository
-public interface LivroDAO extends CrudRepository<Livro, Long> {
+public interface TarefaDAO extends CrudRepository<Tarefa, Long> {
  
-	@Query("select l from Livro l")
-    public List<Livro> list();
+	@Query("select t from Tarefa t")
+    public List<Tarefa> list();
 	
-	@Query("select l from Livro l where l.id=:id")
-    public Livro find(@Param(value = "id") Long id);
+	@Query("select t from Tarefa t where t.id=:id")
+    public Tarefa find(@Param(value = "id") Long id);
 }
