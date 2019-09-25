@@ -1,48 +1,37 @@
 package br.com.desafioitau.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import br.com.desafioitau.dao.TarefaDAO;
 import br.com.desafioitau.entity.Tarefa;
+import br.com.desafioitau.repository.TarefaRepository;
 
-@RestController
+@Component
 public class TarefaController {
-	
-	private final TarefaDAO dao;
 
 	@Autowired
-	public TarefaController(TarefaDAO dao) {
-		this.dao = dao;
+	private TarefaRepository repository;
+
+	public Tarefa saveTarefa(@RequestBody Tarefa tarefa) {
+		repository.save(tarefa);
+		return tarefa;
 	}
 
-	@PostMapping(value = "/novaTarefa")
-	public ResponseEntity<Tarefa> createLivro(@RequestBody Tarefa tarefa) {
-		dao.save(tarefa);
-		return new ResponseEntity<>(tarefa, HttpStatus.CREATED);
-	}
-
-	@GetMapping("/tarefas/{id}")	
-	public ResponseEntity<Tarefa> findLivro(Long id) {
-		Tarefa tarefa = dao.find(id);
-
-		if (null == tarefa) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Tarefa>(tarefa, HttpStatus.OK);
-	}
-	
-	@GetMapping("/tarefas")	
-	public List<Tarefa> listTarefas() {
-		List<Tarefa> tarefas = dao.list();
-
+	public List<Tarefa> listAllTarefa() {
+		List<Tarefa> tarefas = repository.list();
 		return tarefas;
+	}
+
+	public Tarefa updateTarefa(Integer id, Tarefa tarefa) {
+		Optional<Tarefa> tarefas = repository.findById(id);
+
+		tarefas.get().setNome(tarefa.getNome());
+		tarefas.get().setStatus(tarefa.getStatus());
+		final Tarefa tarefa1 = repository.save(tarefas.get());
+		return tarefa1;
 	}
 }
