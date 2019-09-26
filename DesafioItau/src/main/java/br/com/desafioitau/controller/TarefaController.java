@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.desafioitau.entity.Tarefa;
 import br.com.desafioitau.repository.TarefaRepository;
+import br.com.desafioitau.util.TarefaStatusEnum;
 
 @Component
 public class TarefaController {
@@ -33,5 +34,13 @@ public class TarefaController {
 		tarefas.get().setStatus(tarefa.getStatus());
 		final Tarefa tarefa1 = repository.save(tarefas.get());
 		return tarefa1;
+	}
+	
+	public boolean validateStatus(Tarefa tarefa) {
+		if(TarefaStatusEnum.STATUS_PENDING.getValue().equalsIgnoreCase(tarefa.getStatus()) 
+				|| TarefaStatusEnum.STATUS_COMPLETED.getValue().equalsIgnoreCase(tarefa.getStatus()))
+			return true;
+			
+		return false;
 	}
 }
